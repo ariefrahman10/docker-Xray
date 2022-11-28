@@ -1,0 +1,71 @@
+{
+    "log": {
+        "access": "/var/log/xray/access.log",
+        "error": "/var/log/xray/error.log",
+        "loglevel": "warning"
+    },
+    "inbounds": [
+        {
+            "port": 3306,
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "your_uuid",
+                        "level": 0,
+                        "email": "love@example.com"
+                    }
+                ],
+                "decryption": "none",
+                "fallbacks": [
+                    {
+                        "dest": "nginx:80",
+                        "xver": 0
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "alpn": [
+                        "http/1.1"
+                    ],
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/letsencrypt/live/your_domain/fullchain.pem",
+                            "keyFile": "/etc/letsencrypt/live/your_domain/privkey.pem"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "port": 65035,
+            "listen": "0.0.0.0",
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "your_uuid",
+                        "level": 0,
+                        "email": "love@example.com"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "path": "/xray"
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom"
+        }
+    ]
+}
